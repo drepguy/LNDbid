@@ -16,7 +16,7 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
-		if name == UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
+		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			-- SendChatMessage("Addontest", "RAID", "Common",""); 
 			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid ");
 			if (endPos ~= nil and startPos ~= nil) then -- !bid Keyword found?
