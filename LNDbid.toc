@@ -1,0 +1,8 @@
+## Interface: 11304
+## Title: LNDbid
+## Author: Fe
+## OptionalDeps: myAddOns
+## SavedVariablesPerCharacter: LNDbid
+## Version: 0.1
+LNDBidFrame.xml
+LNDbid.lua
