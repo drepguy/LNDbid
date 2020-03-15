@@ -3,6 +3,6 @@
 ## Author: Fe
 ## OptionalDeps: myAddOns
 ## SavedVariablesPerCharacter: LNDbid
-## Version: 0.1
+## Version: 0.2
 LNDBidFrame.xml
 LNDbid.lua
