@@ -14,7 +14,7 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
-		if ( event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" ) and  ( arg2 == "Bieten geschlossen!" ) and ( maxdkp > 0 ) then
+		if ( (event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER") and  arg1 == "Bieten geschlossen!" and tonumber(maxdkp) > 0 ) then
 			maxdkp = "0"; --reset max dkp so bidding will stop!
 			print("Bidding stopped!!");
 		end -- Bieten geschlossen!
@@ -31,7 +31,7 @@ function frame:OnEvent(event, arg1, arg2)
 					--print("maxdkp: " .. maxdkp ..  "!");
 					--print(type(maxdkp));
 					if (amount + 5) <= tonumber(maxdkp) then  -- my maxdkp still not reached, so bid next number!
-						if (amount + 5) >= mylastbid then
+						if (amount + 5) >= tonumber(mylastbid) then
 							SendChatMessage( "!bid " .. amount+5, "Raid", "Common", " "); -- bid!!
 							mylastbid = amount+5;
 						else
