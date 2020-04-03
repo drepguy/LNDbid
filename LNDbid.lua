@@ -14,6 +14,11 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
+		if ( event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" ) and  ( arg2 = "Bieten geschlossen!" ) and ( maxdkp >= 0 ) then
+			maxdkp = "0"; --reset max dkp so bidding will stop!
+			print("Bidding stopped!!");
+		end -- Bieten geschlossen!
+			
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
@@ -21,13 +26,17 @@ function frame:OnEvent(event, arg1, arg2)
 			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid ");
 			if (endPos ~= nil and startPos ~= nil) then -- !bid Keyword found?
 				if(endPos - startPos == 4 and startPos < 2) then -- Keyword close to the beginning of the string?
-					local amount = tonumber(string.match (arg1, "%d+"))
+					local amount = tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
 					--print("amount: " .. amount ..  "!");
 					--print("maxdkp: " .. maxdkp ..  "!");
-					
 					--print(type(maxdkp));
-					if (amount + 5) <= tonumber(maxdkp) then  -- my maxdkp still not reach, so bid next number!
-						SendChatMessage( "!bid " .. amount+5, "Raid", "Common", " "); -- bid!!
+					if (amount + 5) <= tonumber(maxdkp) then  -- my maxdkp still not reached, so bid next number!
+						if (amount + 5) >= mylastbid then
+							SendChatMessage( "!bid " .. amount+5, "Raid", "Common", " "); -- bid!!
+							mylastbid = amount+5;
+						else
+							print("You already bid more! Overbidding not necessary!");
+						end
 					else
 						if (tonumber(amount) == tonumber(maxdkp)) then
 							--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
@@ -57,7 +66,7 @@ local function LNDbidAddonCommands(msg, editbox)
 				print("mindkp " .. mindkp);
 				print("maxdkp " .. maxdkp);
 				SendChatMessage( "!bid " .. mindkp, "Raid", "Common", " ");
-			-- Handle adding of the contents of rest... to something. 
+				mylastbid = mindkp; --reset my last bid value
 			else
 			 --If not handled above, display some sort of help message
 				print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
