@@ -81,6 +81,6 @@ local function LNDbidAddonCommands(msg, editbox)
   
 end
 
-SLASH_LNDBID1, SLASH_LNDBID2 = '/lndbid', '/lndb'
-SlashCmdList["LNDBID"] = LNDbidAddonCommands   -- add /lndbid and /lndb to command list
+SLASH_LNDBID1, SLASH_LNDBID2, SLASH_LNDBID3 = '/lndbid', '/lndb', '/bid'
+SlashCmdList["LNDBID"] = LNDbidAddonCommands   -- add /lndbid, /lndb, /bid to command list
 
