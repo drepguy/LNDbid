@@ -14,7 +14,7 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
-		if ( event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" ) and  ( arg2 = "Bieten geschlossen!" ) and ( maxdkp >= 0 ) then
+		if ( event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" ) and  ( arg2 = "Bieten geschlossen!" ) and ( maxdkp > 0 ) then
 			maxdkp = "0"; --reset max dkp so bidding will stop!
 			print("Bidding stopped!!");
 		end -- Bieten geschlossen!
