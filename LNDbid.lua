@@ -5,11 +5,11 @@ frame:RegisterEvent("CHAT_MSG_RAID"); -- Fired when chat message coems
 frame:RegisterEvent("CHAT_MSG_RAID_WARNING");
 frame:RegisterEvent("CHAT_MSG_RAID_LEADER");
 
-local  mindkp, maxdkp = tonumber("0");
+local mindkp, maxdkp = 0,0;
 
 function frame:OnEvent(event, arg1, arg2)
 	if event == "ADDON_LOADED" and arg1 == "LNDbid" then
-		print("LNDbid addon loaded!")	;
+		print("LNDbid addon loaded!");
 		-- Our saved variables are ready at this point. If there are none, both variables will set to nil.
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
@@ -21,7 +21,7 @@ function frame:OnEvent(event, arg1, arg2)
 			
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
-		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
+		if name == UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			-- SendChatMessage("Addontest", "RAID", "Common",""); 
 			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid ");
 			if (endPos ~= nil and startPos ~= nil) then -- !bid Keyword found?
