@@ -23,6 +23,7 @@ function frame:OnEvent(event, arg1, arg2)
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			-- SendChatMessage("Addontest", "RAID", "Common",""); 
+			arg1 = string.lower(arg1);
 			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid ");
 			if (endPos ~= nil and startPos ~= nil) then -- !bid Keyword found?
 				if(endPos - startPos == 4 and startPos < 2) then -- Keyword close to the beginning of the string?
