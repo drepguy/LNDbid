@@ -14,9 +14,9 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
-		if ( event == "CHAT_MSG_RAID_WARNING" and  ( arg1 == "Bieten geschlossen!"  or arg1 == "Bidding Closed!" ) and tonumber(maxdkp) > 0 ) then
+		if ( event == "CHAT_MSG_RAID_WARNING" and  ( arg1 == "Bieten geschlossen!"  or arg1 == "Bidding Closed!" or arg1 == "bidding closed!" or arg1 == "bieten geschlossen!") and tonumber(maxdkp) > 0 ) then
 			maxdkp = "0"; --reset max dkp so bidding will stop!
-			print("Bidding stopped!!");
+			print("Bidding stopped!! Reason: Bidding closed!");
 		end -- Bieten geschlossen!
 			
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
@@ -42,9 +42,11 @@ function frame:OnEvent(event, arg1, arg2)
 						if (tonumber(amount) == tonumber(maxdkp)) then
 							--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
 							maxdkp = tonumber("0")
+							print("Bidding stopped!! Reason: you got outbid -.-");
 						else 
 							--SendChatMessage( "GZ " .. arg2, "Raid", "Common", " ");
 							maxdkp = tonumber("0")
+							print("Bidding stopped!! Reason: you got outbid -.-");
 						end -- maxdkp reached or equal
 					end -- maxdkp not reached
 				end -- Keyword close to the beginning of the string?
@@ -77,7 +79,7 @@ local function LNDbidAddonCommands(msg, editbox)
 		end
 	else
 		maxdkp = "0"; --reset max dkp so bidding will stop!
-		print("Bidding stopped!!");
+		print("Bidding stopped!! Reason: manual command!");
 	end
   
 end
