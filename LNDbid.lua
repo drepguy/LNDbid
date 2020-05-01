@@ -22,10 +22,12 @@ function frame:OnEvent(event, arg1, arg2)
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
-			-- SendChatMessage("Addontest", "RAID", "Common",""); 
-			arg1 = string.lower(arg1);
-			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid ");
-			if (endPos ~= nil and startPos ~= nil) then -- !bid Keyword found?
+			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
+			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid "); -- find !bid statement
+			if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
+				startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
+			end
+			if (endPos ~= nil and startPos ~= nil) then -- !bid or !dkp Keyword found?
 				if(endPos - startPos == 4 and startPos < 2) then -- Keyword close to the beginning of the string?
 					local amount = tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
 					--print("amount: " .. amount ..  "!");
