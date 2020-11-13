@@ -24,7 +24,7 @@ function frame:OnEvent(event, arg1, arg2)
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
 			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid "); -- find !bid statement
-			if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
+			if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that
 				startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
 			end
 			if (endPos ~= nil and startPos ~= nil) then -- !bid or !dkp Keyword found?
@@ -40,16 +40,9 @@ function frame:OnEvent(event, arg1, arg2)
 						else
 							print("You already bid more! Overbidding not necessary!");
 						end
-					else
-						if (tonumber(amount) == tonumber(maxdkp)) then
-							--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
-							maxdkp = tonumber("0")
-							print("Bidding stopped!! Reason: you got outbid -.-");
-						else 
-							--SendChatMessage( "GZ " .. arg2, "Raid", "Common", " ");
-							maxdkp = tonumber("0")
-							print("Bidding stopped!! Reason: you got outbid -.-");
-						end -- maxdkp reached or equal
+					else -- i got outbid
+						maxdkp = tonumber("0")
+						print("Bidding stopped!! Reason: you got outbid :<");
 					end -- maxdkp not reached
 				end -- Keyword close to the beginning of the string?
 			end -- !bid command found?
@@ -70,14 +63,15 @@ local function LNDbidAddonCommands(msg, editbox)
 			if mindkp ~= 0 and maxdkp ~= 0 then
 				print("mindkp " .. mindkp);
 				print("maxdkp " .. maxdkp);
+				--send initial bid to raidchat instantly
 				SendChatMessage( "!bid " .. mindkp, "Raid", "Common", " ");
 				mylastbid = mindkp; --reset my last bid value
 			else
 			 --If not handled above, display some sort of help message
-				print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
+				print("Command Error!!! Syntax: /bid mindkp maxdkp oder /bid stop");
 			end
 		else
-			print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
+			print("Command Error!!! Syntax: /bid mindkp maxdkp or /bid stop");
 		end
 	else
 		maxdkp = "0"; --reset max dkp so bidding will stop!
