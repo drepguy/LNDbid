@@ -23,35 +23,41 @@ function frame:OnEvent(event, arg1, arg2)
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
-			local startPos, endPos, firstWord, restOfString = string.find( arg1, "!bid "); -- find !bid statement
-			if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
-				startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
-			end
-			if (endPos ~= nil and startPos ~= nil) then -- !bid or !dkp Keyword found?
-				if(endPos - startPos == 4 and startPos < 2) then -- Keyword close to the beginning of the string?
-					local amount = tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
-					--print("amount: " .. amount ..  "!");
-					--print("maxdkp: " .. maxdkp ..  "!");
-					--print(type(maxdkp));
-					if (amount + 5) <= tonumber(maxdkp) then  -- my maxdkp still not reached, so bid next number!
-						if (amount + 5) >= tonumber(mylastbid) then
-							SendChatMessage( "!bid " .. amount+5, "Raid", "Common", " "); -- bid!!
-							mylastbid = amount+5;
-						else
-							print("You already bid more! Overbidding not necessary!");
-						end
+			local foundNumber = string.match( arg1, "%d+"); -- find a number
+			print("arg1: " .. arg1 .. "!");
+			--if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
+			--	startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
+			--end
+			print("Number: " .. foundNumber ..  "!");
+			if (foundNumber ~= nil and tonumber(foundNumber) > 0) then -- foundnumber > 0
+				local amount = tonumber(foundNumber)--tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
+				--print("amount: " .. amount ..  "!");
+				--print("maxdkp: " .. maxdkp ..  "!");
+				--print(type(maxdkp));
+				if(amount >= 1000) then
+					nextstep = 50;
+				else
+					nextstep = 10;
+				end
+				
+				if (amount + nextstep) <= tonumber(maxdkp) then  -- my maxdkp still not reached, so bid next number!
+					if (amount + nextstep) >= tonumber(mylastbid) then
+						SendChatMessage( amount+nextstep, "Raid", "Common", " "); -- bid!!
+						mylastbid = amount+nextstep;
 					else
-						if (tonumber(amount) == tonumber(maxdkp)) then
-							--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
-							maxdkp = tonumber("0")
-							print("Bidding stopped!! Reason: you got outbid -.-");
-						else 
-							--SendChatMessage( "GZ " .. arg2, "Raid", "Common", " ");
-							maxdkp = tonumber("0")
-							print("Bidding stopped!! Reason: you got outbid -.-");
-						end -- maxdkp reached or equal
-					end -- maxdkp not reached
-				end -- Keyword close to the beginning of the string?
+						print("You already bid more! Overbidding not necessary!");
+					end
+				else
+					if (tonumber(amount) == tonumber(maxdkp)) then
+						--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
+						maxdkp = tonumber("0")
+						print("Bidding stopped!! Reason: you got outbid -.-");
+					else 
+						--SendChatMessage( "GZ " .. arg2, "Raid", "Common", " ");
+						maxdkp = tonumber("0")
+						print("Bidding stopped!! Reason: you got outbid -.-");
+					end -- maxdkp reached or equal
+				end -- maxdkp not reached
 			end -- !bid command found?
 		end -- namecheck and maxdkpcheck
 	end -- event case
@@ -70,7 +76,7 @@ local function LNDbidAddonCommands(msg, editbox)
 			if mindkp ~= 0 and maxdkp ~= 0 then
 				print("mindkp " .. mindkp);
 				print("maxdkp " .. maxdkp);
-				SendChatMessage( "!bid " .. mindkp, "Raid", "Common", " ");
+				SendChatMessage( mindkp, "Raid", "Common", " ");
 				mylastbid = mindkp; --reset my last bid value
 			else
 			 --If not handled above, display some sort of help message
