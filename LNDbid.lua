@@ -7,21 +7,81 @@ frame:RegisterEvent("CHAT_MSG_RAID_LEADER");
 
 local mindkp, maxdkp = 0,0;
 
+
+
+local f = CreateFrame("Frame","WaffleshockFrame") -- Frames should have globaly unique names
+f:SetBackdrop({
+bgFile="Interface/DialogFrame/UI-DialogBox-Background",
+edgeFile="Interface/DialogFrame/UI-DialogBox-Border",
+tile=1, tileSize=32, edgeSize=32,
+insets={left=11, right=12, top=12, bottom=11}
+})
+f:SetWidth(100)
+f:SetHeight(100)
+f:SetPoint("CENTER",UIParent)
+f:EnableMouse(true)
+f:SetMovable(true)
+f:SetUserPlaced(true)
+f:RegisterForDrag("LeftButton")
+f:SetScript("OnDragStart", function(self) self:StartMoving() end)
+f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+f:SetFrameStrata("FULLSCREEN_DIALOG")
+
+f.Close = CreateFrame("Button","$parentClose", f)
+f.Close:SetHeight(24)
+f.Close:SetWidth(25)
+f.Close:SetPoint("TOPRIGHT", -10, -10)
+f.Close:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
+f.Close:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
+f.Close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
+f.Close:SetScript("OnClick", function(self) self:StopBidding("Bidding stopped!! Reason: manual Window close!") end)
+
+f.Stop = CreateFrame("Button","$parentStop", f)
+f.Stop:SetHeight(30)
+f.Stop:SetWidth(110)
+f.Stop:SetPoint("Center", 22, -8)
+f.Stop:SetText("STOP")
+f.Stop:SetNormalFontObject("GameFontNormalSmall")
+
+f.Stop:SetNormalTexture("Interface/Buttons/UI-Panel-Button-Up")
+f.Stop:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight")
+f.Stop:SetPushedTexture("Interface/Buttons/UI-Panel-Button-Down")
+
+--f.Stop:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
+--f.Stop:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
+--f.Close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
+
+f.Stop:SetScript("OnClick", function(self) self:StopBidding("Bidding stopped!! Reason: manual Window close!") end)
+
+function f.Stop:StopBidding(reason)
+	maxdkp = "0"; --reset max dkp so bidding will stop!
+	print(reason);
+	f:Hide();
+end
+
+
+local function StopBidding(reason)
+		maxdkp = "0"; --reset max dkp so bidding will stop!
+		print(reason);
+		f:Hide();
+end
+
+
 function frame:OnEvent(event, arg1, arg2)
 	if event == "ADDON_LOADED" and arg1 == "LNDbid" then
 		print("LNDbid addon loaded!");
+		StopBidding("Initial Load LND Bid");
 		-- Our saved variables are ready at this point. If there are none, both variables will set to nil.
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
 		if ( event == "CHAT_MSG_RAID_WARNING" and  ( arg1 == "Bieten geschlossen!"  or arg1 == "Bidding Closed!" or arg1 == "bidding closed!" or arg1 == "bieten geschlossen!") and tonumber(maxdkp) > 0 ) then
-			maxdkp = "0"; --reset max dkp so bidding will stop!
-			print("Bidding stopped!! Reason: Bidding closed!");
+			StopBidding("Bidding stopped!! Reason: Bidding closed!");
 		end -- Bieten geschlossen!
 			
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
-		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
+		if name == UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
 			local foundNumber = string.match( arg1, "%d+"); -- find a number
 			print("arg1: " .. arg1 .. "!");
@@ -50,12 +110,10 @@ function frame:OnEvent(event, arg1, arg2)
 				else
 					if (tonumber(amount) == tonumber(maxdkp)) then
 						--SendChatMessage( "gleichstand... rollen " .. arg2, "Raid", "Common", " ");
-						maxdkp = tonumber("0")
-						print("Bidding stopped!! Reason: you got outbid -.-");
+						StopBidding("Bidding stopped!! Reason: you got outbid -.-");
 					else 
 						--SendChatMessage( "GZ " .. arg2, "Raid", "Common", " ");
-						maxdkp = tonumber("0")
-						print("Bidding stopped!! Reason: you got outbid -.-");
+						StopBidding("Bidding stopped!! Reason: you got outbid -.-");
 					end -- maxdkp reached or equal
 				end -- maxdkp not reached
 			end -- !bid command found?
@@ -65,6 +123,7 @@ end -- frame
 
 frame:SetScript("OnEvent", frame.OnEvent); -- sets an OnEvent handler
 
+
 -- slash commands
 local function LNDbidAddonCommands(msg, editbox)
 	if (msg ~= "stop") then
@@ -73,9 +132,10 @@ local function LNDbidAddonCommands(msg, editbox)
 		mindkp, maxdkp = string.match(msg, "(%d*)%s*(%d*)")
 		--print("msg " .. msg .. "   maxdkp: " .. maxdkp .. "!");
 		if (maxdkp~="") then
-			if mindkp ~= 0 and maxdkp ~= 0 then
+			if mindkp ~= 0 and maxdkp ~= 0 then -- Start Bidding
 				print("mindkp " .. mindkp);
 				print("maxdkp " .. maxdkp);
+				f:Show();
 				SendChatMessage( mindkp, "Raid", "Common", " ");
 				mylastbid = mindkp; --reset my last bid value
 			else
@@ -86,8 +146,7 @@ local function LNDbidAddonCommands(msg, editbox)
 			print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
 		end
 	else
-		maxdkp = "0"; --reset max dkp so bidding will stop!
-		print("Bidding stopped!! Reason: manual command!");
+		StopBidding("Bidding stopped!! Reason: manual command!");
 	end
   
 end
