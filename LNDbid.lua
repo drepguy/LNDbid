@@ -26,11 +26,30 @@ f:SetScript("OnDragStart", function(self) self:StartMoving() end)
 f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 f:SetFrameStrata("FULLSCREEN_DIALOG")
 
+--Title frame
+f.title = CreateFrame("Frame","$parentTitle", f) -- Frames should have globaly unique names
+f.title:SetBackdrop({
+bgFile="Interface/BlackMarket/BlackMarketBackground-Tile",
+edgeFile="Interface/DialogFrame/UI-DialogBox-Border",
+tile=1, tileSize=24, edgeSize=24,
+insets={left=4, right=4, top=4, bottom=4}
+})
+f.title:SetWidth(90)
+f.title:SetHeight(30)
+f.title:SetPoint("TOP",0,10)
+f.title:SetFrameStrata("FULLSCREEN_DIALOG")
+
+-- Title Label
+f.title.text = f.title:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+f.title.text:SetPoint("CENTER", f.title, "CENTER", 0, 0)
+f.title.text:SetText("LNDBid")
+
+
 -- Close Button!
 f.Close = CreateFrame("Button","$parentClose", f)
 f.Close:SetHeight(24)
 f.Close:SetWidth(25)
-f.Close:SetPoint("TOPRIGHT", -10, -10)
+f.Close:SetPoint("TOPRIGHT", -10, -12)
 f.Close:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
 f.Close:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
 f.Close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
