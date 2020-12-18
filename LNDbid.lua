@@ -48,10 +48,10 @@ f.Stop:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight")
 f.Stop:SetPushedTexture("Interface/Buttons/UI-Panel-Button-Down")
 f.Stop:SetScript("OnClick", function(self) self:StopBidding("Bidding stopped!! Reason: manual Window close!") end)
 
--- Stop Button Label as a frame
+-- Stop Button Label
 f.Stop.text = f.Stop:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-frame.text:SetPoint("BOTTOM", f.Stop, "TOP", 5, 0)
-frame.text:SetText("Stop Bidding")
+f.Stop.text:SetPoint("BOTTOM", f.Stop, "TOP", 5, 0)
+f.Stop.text:SetText("Stop Bidding")
 
 -- Button Function
 function f.Stop:StopBidding(reason)
