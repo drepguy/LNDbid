@@ -7,8 +7,7 @@ frame:RegisterEvent("CHAT_MSG_RAID_LEADER");
 
 local mindkp, maxdkp = 0,0;
 
-
-
+-- Main Frame!
 local f = CreateFrame("Frame","WaffleshockFrame") -- Frames should have globaly unique names
 f:SetBackdrop({
 bgFile="Interface/DialogFrame/UI-DialogBox-Background",
@@ -27,6 +26,7 @@ f:SetScript("OnDragStart", function(self) self:StartMoving() end)
 f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
 f:SetFrameStrata("FULLSCREEN_DIALOG")
 
+-- Close Button!
 f.Close = CreateFrame("Button","$parentClose", f)
 f.Close:SetHeight(24)
 f.Close:SetWidth(25)
@@ -36,37 +36,38 @@ f.Close:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
 f.Close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
 f.Close:SetScript("OnClick", function(self) self:StopBidding("Bidding stopped!! Reason: manual Window close!") end)
 
+-- Stop Button
 f.Stop = CreateFrame("Button","$parentStop", f)
 f.Stop:SetHeight(30)
 f.Stop:SetWidth(110)
 f.Stop:SetPoint("Center", 22, -8)
-f.Stop:SetText("STOP")
+--f.Stop:SetText("STOP") --This sets text directly to the button as a lable, but cannot get justified
 f.Stop:SetNormalFontObject("GameFontNormalSmall")
-
 f.Stop:SetNormalTexture("Interface/Buttons/UI-Panel-Button-Up")
 f.Stop:SetHighlightTexture("Interface/Buttons/UI-Panel-Button-Highlight")
 f.Stop:SetPushedTexture("Interface/Buttons/UI-Panel-Button-Down")
-
---f.Stop:SetNormalTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Up")
---f.Stop:SetPushedTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Down")
---f.Close:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight", "ADD")
-
 f.Stop:SetScript("OnClick", function(self) self:StopBidding("Bidding stopped!! Reason: manual Window close!") end)
 
+-- Stop Button Label as a frame
+f.Stop.text = f.Stop:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+frame.text:SetPoint("BOTTOM", f.Stop, "TOP", 5, 0)
+frame.text:SetText("Stop Bidding")
+
+-- Button Function
 function f.Stop:StopBidding(reason)
 	maxdkp = "0"; --reset max dkp so bidding will stop!
 	print(reason);
 	f:Hide();
 end
 
-
+-- local StopBidding Function
 local function StopBidding(reason)
 		maxdkp = "0"; --reset max dkp so bidding will stop!
 		print(reason);
 		f:Hide();
 end
 
-
+-- event parsing and main logic
 function frame:OnEvent(event, arg1, arg2)
 	if event == "ADDON_LOADED" and arg1 == "LNDbid" then
 		print("LNDbid addon loaded!");
