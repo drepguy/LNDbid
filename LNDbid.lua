@@ -16,7 +16,7 @@ tile=1, tileSize=32, edgeSize=32,
 insets={left=11, right=12, top=12, bottom=11}
 })
 f:SetWidth(150)
-f:SetHeight(200)
+f:SetHeight(160)
 f:SetPoint("CENTER",UIParent)
 f:EnableMouse(true)
 f:SetMovable(true)
@@ -40,7 +40,7 @@ f.Close:SetScript("OnClick", function(self) self:GetParent():StopBidding("Biddin
 f.Stop = CreateFrame("Button","$parentStop", f)
 f.Stop:SetHeight(30)
 f.Stop:SetWidth(145)
-f.Stop:SetPoint("Center", 26, -33)
+f.Stop:SetPoint("TOP", 25, -120)
 --f.Stop:SetText("STOP") --This sets text directly to the button as a lable, but cannot get justified
 f.Stop:SetNormalFontObject("GameFontNormalSmall")
 f.Stop:SetNormalTexture("Interface/Buttons/UI-Panel-Button-Up")
@@ -57,7 +57,7 @@ f.Stop.text:SetText("Stop Bidding")
 f.Start = CreateFrame("Button","$parentStop", f)
 f.Start:SetHeight(30)
 f.Start:SetWidth(145)
-f.Start:SetPoint("Center", 26, -13)
+f.Start:SetPoint("TOP", 25, -98)
 --f.Start:SetText("STOP") --This sets text directly to the button as a lable, but cannot get justified
 f.Start:SetNormalFontObject("GameFontNormalSmall")
 f.Start:SetNormalTexture("Interface/Buttons/UI-Panel-Button-Up")
@@ -80,7 +80,7 @@ f.mindkp:SetBackdrop({
 			edgeSize = 10,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
-f.mindkp:SetTextInsets(5,0, 0, 0)
+f.mindkp:SetTextInsets(5, 0, 2, 0)
 f.mindkp:SetPoint("TOPLEFT", 70, -40)
 f.mindkp:SetSize(10,20)
 f.mindkp:SetWidth(50)
@@ -89,8 +89,9 @@ f.mindkp:SetText("")
 f.mindkp:SetMultiLine(false)
 f.mindkp:SetAutoFocus(false) -- dont automatically focus
 f.mindkp:SetFontObject("GameFontHighlightSmall")
-f.mindkp:SetMaxLetters(4);
+f.mindkp:SetMaxLetters(5);
 f.mindkp:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+f.mindkp:SetScript("OnTabPressed", function(self) f.maxdkp:SetFocus() end)
 
 -- max dkp Label
 f.mindkp.text = f.mindkp:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -107,7 +108,7 @@ f.maxdkp:SetBackdrop({
 			edgeSize = 10,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
-f.maxdkp:SetTextInsets(5,0, 0, 0)
+f.maxdkp:SetTextInsets(5, 0, 2, 0)
 f.maxdkp:SetPoint("TOPLEFT", 70, -60)
 f.maxdkp:SetSize(10,20)
 f.maxdkp:SetWidth(50)
@@ -116,8 +117,9 @@ f.maxdkp:SetText("")
 f.maxdkp:SetMultiLine(false)
 f.maxdkp:SetAutoFocus(false) -- dont automatically focus
 f.maxdkp:SetFontObject("GameFontHighlightSmall")
-f.maxdkp:SetMaxLetters(4);
+f.maxdkp:SetMaxLetters(5);
 f.maxdkp:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+f.maxdkp:SetScript("OnTabPressed", function(self) f.mindkp:SetFocus() end)
 
 -- max dkp Label
 f.maxdkp.text = f.maxdkp:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
