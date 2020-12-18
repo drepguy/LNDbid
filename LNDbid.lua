@@ -138,6 +138,11 @@ local function StopBidding(reason)
 		f:Hide();
 end
 
+-- local StopBidding Function
+local function Hide()
+		f:Hide();
+end
+
 -- Button Function
 function f:StartBidding(reason)
 	SendChatMessage( f.mindkp:GetText(), "Raid", "Common", " ");
@@ -156,7 +161,7 @@ end
 function frame:OnEvent(event, arg1, arg2)
 	if event == "ADDON_LOADED" and arg1 == "LNDbid" then
 		print("LNDbid addon loaded!");
-		--f.Hide();
+		Hide();
 		-- Our saved variables are ready at this point. If there are none, both variables will set to nil.
 	elseif event == "PLAYER_LOGOUT" then
 		-- dont do anything
@@ -170,11 +175,11 @@ function frame:OnEvent(event, arg1, arg2)
 		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
 			local foundNumber = string.match( arg1, "%d+"); -- find a number
-			print("arg1: " .. arg1 .. "!");
+			--print("arg1: " .. arg1 .. "!");
 			--if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
 			--	startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
 			--end
-			print("Number: " .. foundNumber ..  "!");
+			--print("Number: " .. foundNumber ..  "!");
 			if (foundNumber ~= nil and tonumber(foundNumber) > 0) then -- foundnumber > 0
 				local amount = tonumber(foundNumber)--tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
 				--print("amount: " .. amount ..  "!");
@@ -205,7 +210,7 @@ function frame:OnEvent(event, arg1, arg2)
 			end -- !bid command found?
 		elseif tonumber(maxdkp) == 0 or maxdkp == "" then
 			if f:IsVisible() then
-				print(string.match( arg1, "%d+"))
+				--print(string.match( arg1, "%d+"))
 				if (tonumber(string.match( arg1, "%d+"))) then -- check if value was found
 					f.mindkp:SetText(tonumber(string.match( arg1, "%d+"))+10); -- set number as min dkp
 				end
@@ -223,7 +228,7 @@ local function LNDbidAddonCommands(msg, editbox)
 		-- pattern matching that skips leading whitespace and whitespace between cmd and args
 		-- any whitespace at end of args is retained
 		mindkp, tempmaxdkp = string.match(msg, "(%d*)%s*(%d*)")
-		print(mindkp .. "  " .. tempmaxdkp .. "  " .. maxdkp)
+		--print(mindkp .. "  " .. tempmaxdkp .. "  " .. maxdkp)
 		--print("msg " .. msg .. "   maxdkp: " .. maxdkp .. "!");
 		if (tostring(tempmaxdkp)~="") then
 			if mindkp ~= 0 and tempmaxdkp ~= 0 then -- Start Bidding
@@ -234,11 +239,11 @@ local function LNDbidAddonCommands(msg, editbox)
 				--mylastbid = mindkp; --reset my last bid value
 			else
 			 --If not handled above, display some sort of help message
-				print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
+				--print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
 				f:Show();
 			end
 		else
-			print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
+			--print("Command Error!!! Syntax: /lndb mindkp maxdkp oder /lndb stop");
 			f:Show();
 		end
 	else
