@@ -53,7 +53,6 @@ f.Stop.text = f.Stop:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 f.Stop.text:SetPoint("LEFT", f.Stop, "LEFT", 15, 3)
 f.Stop.text:SetText("Stop Bidding")
 
-
 -- Start Button
 f.Start = CreateFrame("Button","$parentStop", f)
 f.Start:SetHeight(30)
@@ -91,12 +90,12 @@ f.mindkp:SetMultiLine(false)
 f.mindkp:SetAutoFocus(false) -- dont automatically focus
 f.mindkp:SetFontObject("GameFontHighlightSmall")
 f.mindkp:SetMaxLetters(4);
+f.mindkp:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
 
 -- max dkp Label
 f.mindkp.text = f.mindkp:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 f.mindkp.text:SetPoint("LEFT", f.mindkp, "LEFT",-45, 0)
 f.mindkp.text:SetText("mindkp")
-
 
 -- max dkp edit box
 f.maxdkp = CreateFrame("EditBox", "$parentmaxdkp", WaffleshockFrame)
@@ -118,13 +117,12 @@ f.maxdkp:SetMultiLine(false)
 f.maxdkp:SetAutoFocus(false) -- dont automatically focus
 f.maxdkp:SetFontObject("GameFontHighlightSmall")
 f.maxdkp:SetMaxLetters(4);
+f.maxdkp:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
 
 -- max dkp Label
 f.maxdkp.text = f.maxdkp:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
 f.maxdkp.text:SetPoint("LEFT", f.maxdkp, "LEFT",-45, 0)
 f.maxdkp.text:SetText("maxdkp")
-
-
 
 -- Button Function
 function f:StopBidding(reason)
@@ -153,9 +151,6 @@ local function StartBidding(reason)
 	mylastbid = tonumber(f.mindkp:GetText()); --reset my last bid value
 	maxdkp = tonumber(f.maxdkp:GetText())
 end
-
-
-
 
 -- event parsing and main logic
 function frame:OnEvent(event, arg1, arg2)
