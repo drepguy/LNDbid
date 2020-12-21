@@ -189,23 +189,27 @@ function frame:OnEvent(event, arg1, arg2)
 	elseif ( event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_WARNING" or event == "CHAT_MSG_RAID_LEADER" )   then
 		if ( event == "CHAT_MSG_RAID_WARNING" and  ( arg1 == "Bieten geschlossen!"  or arg1 == "Bidding Closed!" or arg1 == "bidding closed!" or arg1 == "bieten geschlossen!") and tonumber(maxdkp) > 0 ) then
 			StopBidding("Bidding stopped!! Reason: Bidding closed!");
-		end -- Bieten geschlossen!
-			
+		end -- Bieten geschlossen!		
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
-		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
-			arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
+		if name == UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
+			--arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
 			local foundNumber = string.match( arg1, "%d+"); -- find a number
-			--print("arg1: " .. arg1 .. "!");
-			--if (endPos == nil and startPos == nil) then -- if not found, try the !dkp statement, someone might use that -.-
-			--	startPos, endPos, firstWord, restOfString = string.find( arg1, "!dkp ");
-			--end
-			--print("Number: " .. foundNumber ..  "!");
-			if (foundNumber ~= nil and tonumber(foundNumber) > 0) then -- foundnumber > 0
+			local isitemstring = 0;
+			
+			if (tonumber(string.match( tostring(arg1), "%d+"))) then -- check if value was found
+				local itemString = select(3, strfind(arg1, "|H(.+)|h")) -- schauen ob es evtl ein item ist...
+				if not itemString then	--ist kein item gepostet worden, also ist das eine zahl, dann fenster füllen
+					isitemstring = 0;
+				else		 --ist item string, also nichts tun!		
+					print("  Debug: ist item string, ignoriere das... " .. itemString)
+					isitemstring = 1;
+				end
+			end			
+				
+			if (foundNumber ~= nil and tonumber(foundNumber) > 0 and isitemstring == 0) then -- foundnumber > 0
 				local amount = tonumber(foundNumber)--tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
-				--print("amount: " .. amount ..  "!");
-				--print("maxdkp: " .. maxdkp ..  "!");
-				--print(type(maxdkp));
+
 				if(amount >= 1000) then
 					nextstep = 50;
 				else
@@ -228,12 +232,17 @@ function frame:OnEvent(event, arg1, arg2)
 						StopBidding("Bidding stopped!! Reason: you got outbid -.-");
 					end -- maxdkp reached or equal
 				end -- maxdkp not reached
-			end -- !bid command found?
+			end -- foundnumber > = ?
 		elseif tonumber(maxdkp) == 0 or maxdkp == "" then
-			if f:IsVisible() then
+			if f:IsVisible() then -- evtl min dkp wert füllen
 				--print(string.match( arg1, "%d+"))
-				if (tonumber(string.match( arg1, "%d+"))) then -- check if value was found
-					f.mindkp:SetText(tonumber(string.match( arg1, "%d+"))+10); -- set number as min dkp
+				if (tonumber(string.match( tostring(arg1), "%d+"))) then -- check if value was found
+					local itemString = select(3, strfind(arg1, "|H(.+)|h")) -- schauen ob es evtl ein item ist...
+					if not itemString then	--ist kein item gepostet worden, also ist das eine zahl, dann fenster füllen
+						f.mindkp:SetText(tonumber(string.match( arg1, "%d+"))+10); -- set number as min dkp
+					else		 --ist item string, also nichts tun!		
+						print("Debug: ist item string, ignoriere das... " .. itemString)
+					end
 				end
 			end
 		end -- namecheck and maxdkpcheck
@@ -241,7 +250,6 @@ function frame:OnEvent(event, arg1, arg2)
 end -- frame
 
 frame:SetScript("OnEvent", frame.OnEvent); -- sets an OnEvent handler
-
 
 -- slash commands
 local function LNDbidAddonCommands(msg, editbox)
