@@ -192,7 +192,7 @@ function frame:OnEvent(event, arg1, arg2)
 		end -- Bieten geschlossen!		
 		name, realm = string.match(arg2, "(%D+)-(%D+)"); -- parse name and realm of author of raid chatmessage!
 		--print("UnitnameFKT: " .. UnitName("player") .. "   name: " .. name .. "!"); 
-		if name == UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
+		if name ~= UnitName("player") and tonumber(maxdkp) ~= 0 then -- dont overbid yourself and only if maxdkp is set
 			--arg1 = string.lower(arg1); -- if someone thinks using upper case letters is fun
 			local foundNumber = string.match( arg1, "%d+"); -- find a number
 			local isitemstring = 0;
