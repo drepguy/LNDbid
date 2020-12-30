@@ -237,10 +237,13 @@ function frame:OnEvent(event, arg1, arg2)
 			if f:IsVisible() then -- evtl min dkp wert füllen
 				--print(string.match( arg1, "%d+"))
 				if (tonumber(string.match( tostring(arg1), "%d+"))) then -- check if value was found
-					local itemString = select(3, strfind(arg1, "|H(.+)|h")) -- schauen ob es evtl ein item ist...
+					local itemString = select(3, strfind(arg1, "|H(.+)|h")); -- schauen ob es evtl ein item ist...
 					if not itemString then	--ist kein item gepostet worden, also ist das eine zahl, dann fenster füllen
-						f.mindkp:SetText(tonumber(string.match( arg1, "%d+"))+10); -- set number as min dkp
-					else		 --ist item string, also nichts tun!		
+						local a = tonumber(string.match( arg1, "%d+"));
+						if a >= 10 then -- check if number is big enough, otherwise ignore
+							f.mindkp:SetText(tonumber(string.match( arg1, "%d+"))+10); -- set number as min dkp
+						end -- check if number is big enough
+					else -- is item string, so ignore		
 						print("Debug: ist item string, ignoriere das... " .. itemString)
 					end
 				end
