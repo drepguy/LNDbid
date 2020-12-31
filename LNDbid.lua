@@ -233,9 +233,8 @@ function frame:OnEvent(event, arg1, arg2)
 					end -- maxdkp reached or equal
 				end -- maxdkp not reached
 			end -- foundnumber > = ?
-		elseif tonumber(maxdkp) == 0 or maxdkp == "" then
-			if f:IsVisible() then -- evtl min dkp wert füllen
-				--print(string.match( arg1, "%d+"))
+		elseif tonumber(maxdkp) == 0 or maxdkp == "" then -- your bidding has not yet started
+			if f:IsVisible() then -- and window is visible -> evtl min dkp wert füllen
 				if (tonumber(string.match( tostring(arg1), "%d+"))) then -- check if value was found
 					local itemString = select(3, strfind(arg1, "|H(.+)|h")); -- schauen ob es evtl ein item ist...
 					if not itemString then	--ist kein item gepostet worden, also ist das eine zahl, dann fenster füllen
