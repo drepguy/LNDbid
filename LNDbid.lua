@@ -210,8 +210,10 @@ function frame:OnEvent(event, arg1, arg2)
 			if (foundNumber ~= nil and tonumber(foundNumber) > 0 and isitemstring == 0) then -- foundnumber > 0
 				local amount = tonumber(foundNumber)--tonumber(string.match (arg1, "%d+")) -- Keyword found, so now parse number
 
-				if(amount >= 1000) then
+				if (amount >= 500 and amount < 1000) then
 					nextstep = 50;
+				elseif (amount >= 1000) then
+					nextstep = 100;
 				else
 					nextstep = 10;
 				end
