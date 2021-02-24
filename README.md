@@ -1,7 +1,7 @@
 # LNDbid
 LNDbid addon from Guild Legends Never Die to auto bid in Raidchat. Create a directory LNDbid in addons folder of your WoW Installation and copy files in this new directory.
 # Install
-Copy files in ..\World of Warcraft\_classic_\Interface\Addons\LNDbid
+Copy files (lua, xml, toc) in ..\World of Warcraft\_classic_\Interface\Addons\LNDbid
 ## Usage
 Open the bid window with /bid or /lndb. Enter your Min DKP Value and your Max DKP Value. You can also preset the values with the command "/dkp mindkp maxdkp". Click start to start bidding process. If someone bids before you started the process the value in Min DKP will be set automatically. Then you just have to set the Max DKP Value and start the process.  
 ## Restrictions
